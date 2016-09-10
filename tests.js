@@ -84,6 +84,37 @@ describe('string-replace-stream', function () {
           done
         );
       });
+
+
+      it('should handle a prefix of the search string overlapping the actual search', function (done) {
+        testReplacement(
+          ["abcabcabcabcdtesttest"],
+          "abcabcd",
+          "badger",
+          "abcabcbadgertesttest",
+          done
+        );
+      });
+
+      it('should handle a prefix of the search string overlapping the actual search broken into chunks', function (done) {
+        testReplacement(
+          ["abcabcabc","abcdtest","test"],
+          "abcabcd",
+          "badger",
+          "abcabcbadgertesttest",
+          done
+        );
+      });
+
+      it('should handle "dangling tails" where the stream ends in a prefix of the search string', function (done) {
+        testReplacement(
+          ["abcefg","hijklmnopqrstu","vw"],
+          "uvwxyz",
+          "test",
+          "abcefghijklmnopqrstuvw",
+          done
+        );
+      });
     });
   });
 });
