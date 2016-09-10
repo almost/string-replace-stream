@@ -3,8 +3,18 @@ var expect = require('expect.js');
 var concat = require('concat-stream');
 
 
-// Ruining poetry with node.js
 describe('string-replace-stream', function () {
+  // First test KNP table building internal function
+  describe('_buildTable', function () {
+    it('should build knp table', function () {
+      expect(stringReplaceString._buildTable("ABCDABD")).eql([-1, 0, 0, 0, 0, 1, 2]);
+      expect(stringReplaceString._buildTable("PARTICIPATE IN PARACHUTE")).eql([
+          -1,0,0,0,0,0,0,0,1,2,0,0,0,0,0,0,1,2,3,0,0,0,0,0
+      ]);
+    });
+  });
+
+  // Ruining poetry with node.js
   ["string", "buffer"].forEach(function (type) {
     function testReplacement(haystack, search, replace, result, done) {
       replaceStream = stringReplaceString(search, replace);
@@ -96,6 +106,28 @@ describe('string-replace-stream', function () {
         );
       });
 
+      it('should handle match no matter where it falls on chunk break', function (done) {
+        var haystack = "the Jabberwock son!";
+        var todo = 0;
+        function doneOne() {
+          todo--;
+          if (todo === 0) done();
+        }
+        for (var i = 1; i < haystack.length-1; i++) {
+          for (var k = i + 1; k < haystack.length-1; k++) {
+            todo++;
+            testReplacement(
+              [haystack.slice(0, i), haystack.slice(i, k), haystack.slice(k) + k],
+              "Jabber",
+              "XMPP",
+              "the XMPPwock son!" + k,
+              doneOne
+            );
+          }
+        }
+      });
+
+
       it('should handle a prefix of the search string overlapping the actual search broken into chunks', function (done) {
         testReplacement(
           ["abcabcabc","abcdtest","test"],
@@ -117,4 +149,5 @@ describe('string-replace-stream', function () {
       });
     });
   });
+
 });

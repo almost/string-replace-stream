@@ -1,7 +1,9 @@
 string-replace-stream
 =====================
 
-
+Replace one string with another string in a stream of text. Only supports
+straight string replacement, no regexs. Handles replacing strings that span
+multiple chunks in the stream correctly.
 
 Written by Thomas Parslow ([almostobsolete.net](http://almostobsolete.net) and
 [tomparslow.co.uk](http://tomparslow.co.uk)) for IORad
@@ -30,6 +32,26 @@ fs.createReadStream('data.txt')
   .pipe(process.stdout);
 ```
 
+Specify an encoding (defaults to utf8):
+
+
+```javascript
+stringReplaceStream("awesome", "rather good"), {encoding: "ascii"})
+```
+
+Other Libaries
+--------------
+
+There are a couple of other similar libraries on NPM already:
+
+[replacestream](https://github.com/eugeneware/replacestream): More fully
+featured, supports regular expressions. Can be a lot slower depending on the
+input (in my testing it does particulary badly with large streams in which the
+search string only seldom appears)
+
+[stream-replace](https://github.com/lxe/stream-replace): Much faster (about 5
+times in my testing) but doesn't always give the right answer. Can't handle a
+search string that spans 3 or more chunks.
 
 Contributing
 ------------
