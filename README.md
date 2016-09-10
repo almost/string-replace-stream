@@ -1,7 +1,7 @@
 string-replace-stream
 =====================
 
-Replace one string with another string in a stream of text. Only supports
+Replace one string with another string in a Node.js Stream. Only supports
 straight string replacement, no regexs. Handles replacing strings that span
 multiple chunks in the stream correctly.
 
@@ -32,7 +32,8 @@ fs.createReadStream('data.txt')
   .pipe(process.stdout);
 ```
 
-Specify an encoding (defaults to utf8):
+Buffers are converted to strings before search and replace is performed. You can
+specify an encoding (it defaults to utf8):
 
 
 ```javascript

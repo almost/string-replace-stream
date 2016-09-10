@@ -1,7 +1,7 @@
 {
   "name": "string-replace-stream",
   "version": "0.0.1",
-  "description": "Replace one string in a stream with another",
+  "description": "Replace one string with another in a Node.JS Stream",
   "main": "string-replace-stream.js",
   "files": [
     "string-replace-stream.js"
