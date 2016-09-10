@@ -9,6 +9,8 @@ Written by Thomas Parslow ([almostobsolete.net](http://almostobsolete.net) and
 [tomparslow.co.uk](http://tomparslow.co.uk)) for IORad
 ([iorad.com](http://iorad.com/)) and released with their kind permission.
 
+[![NPM](https://nodei.co/npm/string-replace-stream.png?downloads&downloadRank)](https://nodei.co/npm/string-replace-stream/)
+
 [![Build Status](https://travis-ci.org/almost/string-replace-stream.svg)](https://travis-ci.org/almost/string-replace-stream)
 
 
