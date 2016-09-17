@@ -2,6 +2,7 @@
 // string spans multiple chunks
 'use strict';
 var through2 = require('through2');
+var StringDecoder = require('string_decoder').StringDecoder;
 
 // Build the Knuth-Morris-Pratt table
 function buildTable(search) {
@@ -30,6 +31,7 @@ function buildTable(search) {
 // Create a transform stream that replaces one string with another
 module.exports = function replaceStream(search, replace, opts) {
   var encoding = (opts && opts.encoding) || 'utf8';
+  var decoder = new StringDecoder(encoding);
   var matchStart = 0, matchPos = 0;
   var table = buildTable(search);
   var buffer = [], bufferLen = 0, bufferStart = 0,
@@ -43,7 +45,7 @@ module.exports = function replaceStream(search, replace, opts) {
 
     while (outputTo > 0 && outputTo > bufferStart) {
       if (outputTo > buffer[0].length-1) {
-        var part = buffer.shift()
+        var part = buffer.shift();
         outputBuffer.push(part.slice(bufferStart));
 
         bufferStart = Math.max(0, bufferStart - part.length);
@@ -64,7 +66,7 @@ module.exports = function replaceStream(search, replace, opts) {
 
   return through2(
     function (chunk, enc, callback) {
-      chunk = chunk.toString(encoding);
+      chunk = decoder.write(chunk);
       chunkLength = chunk.length;
       buffer.push(chunk);
       bufferLen += chunkLength;

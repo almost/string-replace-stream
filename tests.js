@@ -147,7 +147,25 @@ describe('string-replace-stream', function () {
           done
         );
       });
+
     });
   });
 
+
+  it('should handle unicode characters split between blocks', function (done) {
+    var input = new Buffer("My ☃ cost £100 🙁!", "utf-8");
+    var replaceStream = stringReplaceString("☃ cost £100 🙁", "snowman cost £100 :(");
+    replaceStream.pipe(concat({encoding: 'string'}, complete));
+
+    // One byte at a time, doesn't get any more split than that
+    for (var i = 0; i < input.length; i++) {
+      replaceStream.write(input.slice(i,i+1));
+    }
+    replaceStream.end();
+
+    function complete(output) {
+      expect(output).to.equal(("My snowman cost £100 :(!"));
+      done();
+    }
+  });
 });
